@@ -29,14 +29,14 @@ public class Harbor extends javax.swing.JFrame {
 
     public Harbor(ArrayList<Ship> ships) {
         initComponents();
-
+        this.ships = ships;
+        this.jTextArea1.setText("Iniciando a operação...");
     }
 
     public void start() {
-        this.ships = ships;
         sortShips();
         this.ships.forEach((ship) -> {
-            ship.getThrd().start();
+            ship.getThrd().run();
             try {
                 ship.getThrd().join();
             } catch (InterruptedException ex) {
@@ -64,8 +64,6 @@ public class Harbor extends javax.swing.JFrame {
         });
 
         Collections.sort(ships, (Ship ship1, Ship ship2) -> Integer.compare(ship2.getThrd().getPriority(), ship1.getThrd().getPriority()));
-
-        System.out.println("aaaa");
     }
 
     public synchronized void operation(Ship ship) {
@@ -86,6 +84,8 @@ public class Harbor extends javax.swing.JFrame {
             Logger.getLogger(Harbor.class.getName()).log(Level.SEVERE, null, ex);
         }
         available = true;
+        this.jTextArea1.setText(this.jTextArea1.getText() + "\n"
+                + "Navio: " + ship.getName() + " Operação: " + ship.getOperation().getName() + " Prioridade: " + ship.getThrd().getPriority());
         notifyAll();
 
     }
@@ -99,17 +99,31 @@ public class Harbor extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jTextArea1.setText("T");
+        jScrollPane1.setViewportView(jTextArea1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -151,5 +165,7 @@ public class Harbor extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
 }
